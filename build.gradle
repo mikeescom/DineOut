@@ -48,4 +48,5 @@ ext {
     retrofit2Version = '2.3.0'
     gsonVersion = '2.8.2'
     sqlbriteVersion = '2.0.0'
+    roomVersion = '1.1.1'
 }
