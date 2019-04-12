@@ -56,8 +56,8 @@ public class CategoryRecyclerViewAdapter extends RecyclerView.Adapter<CategoryRe
 
         public void set(Context context, Category item) {
             //UI setting code
-            textViewCategoryId.setText(context.getString(R.string.placeholder_category_id, item.getCategoryId()));
-            textViewCategoryName.setText(context.getString(R.string.placeholder_category_name, item.getCategoryName()));
+            textViewCategoryId.setText(context.getString(R.string.placeholder_category_id, item.getId()));
+            textViewCategoryName.setText(context.getString(R.string.placeholder_category_name, item.getName()));
         }
     }
 }

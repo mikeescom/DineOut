@@ -1,8 +1,8 @@
 package com.mikeescom.dineout.repo;
 
-import com.mikeescom.dineout.repo.dto.Category;
 import com.mikeescom.dineout.repo.local.DineOutLocalRepo;
 import com.mikeescom.dineout.repo.remote.DineOutRemoteRepo;
+import com.mikeescom.dineout.repo.request.GetCategoriesRequest;
 
 import java.util.List;
 
@@ -21,11 +21,11 @@ public class DineOutRepoImpl implements DineOutRepo {
     }
 
     @Override
-    public Observable<List<Category>> getCategories() {
-        return Observable.mergeDelayError(remoteDineOutRepo.getCategories().doOnNext(new Consumer<List<Category>>() {
+    public Observable<GetCategoriesRequest> getCategories() {
+        return Observable.mergeDelayError(remoteDineOutRepo.getCategories().doOnNext(new Consumer<GetCategoriesRequest>() {
                     @Override
-                    public void accept(List<Category> categories) throws Exception {
-                        localDineOutRepo.saveCategories(categories);
+                    public void accept(GetCategoriesRequest categories) throws Exception {
+                        localDineOutRepo.saveCategories(categories.getCategories());
                     }
                 }).subscribeOn(Schedulers.io()), localDineOutRepo.getCategories().subscribeOn(Schedulers.io())
         );

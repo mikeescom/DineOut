@@ -13,6 +13,7 @@ import com.mikeescom.dineout.repo.dto.LocationDetails;
 import com.mikeescom.dineout.repo.dto.Restaurant;
 import com.mikeescom.dineout.repo.dto.Review;
 import com.mikeescom.dineout.repo.dto.Search;
+import com.mikeescom.dineout.repo.request.GetCategoriesRequest;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -34,11 +35,11 @@ public class DineOutLocalRepoImpl implements DineOutLocalRepo {
     }
 
     @Override
-    public Observable<List<Category>> getCategories() {
-        return Observable.fromCallable(new Callable<List<Category>>() {
+    public Observable<GetCategoriesRequest> getCategories() {
+        return Observable.fromCallable(new Callable<GetCategoriesRequest>() {
             @Override
-            public List<Category> call() throws Exception {
-                return categoriesDao.getAll();
+            public GetCategoriesRequest call() throws Exception {
+                return new GetCategoriesRequest(categoriesDao.getAll());
             }
         });
     }

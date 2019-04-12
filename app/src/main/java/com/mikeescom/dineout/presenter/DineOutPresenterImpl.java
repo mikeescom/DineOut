@@ -2,6 +2,7 @@ package com.mikeescom.dineout.presenter;
 
 import com.mikeescom.dineout.repo.DineOutRepo;
 import com.mikeescom.dineout.repo.dto.Category;
+import com.mikeescom.dineout.repo.request.GetCategoriesRequest;
 
 import java.util.List;
 
@@ -10,13 +11,13 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
 
 public class DineOutPresenterImpl extends DineOutPresenter {
-    private DineOutRepo dineOutRep;
-    private Scheduler scheduler;
-    private Disposable disposable;
+    private DineOutRepo mDineOutRep;
+    private Scheduler mScheduler;
+    private Disposable mDisposable;
 
     public DineOutPresenterImpl(DineOutRepo dineOutRepo, Scheduler scheduler) {
-        this.dineOutRep = dineOutRep;
-        this.scheduler = scheduler;
+        mDineOutRep = dineOutRepo;
+        mScheduler = scheduler;
     }
 
     @Override
@@ -27,14 +28,12 @@ public class DineOutPresenterImpl extends DineOutPresenter {
 
         getView().showLoading();
 
-        disposable = dineOutRep.getCategories().observeOn(scheduler).subscribeWith(new DisposableObserver<List<Category>>() {
+        mDisposable = mDineOutRep.getCategories().observeOn(mScheduler).subscribeWith(new DisposableObserver<GetCategoriesRequest>() {
             @Override
-            public void onNext(List<Category> categories) {
+            public void onNext(GetCategoriesRequest categories) {
                 if (!isViewAttached())
                     return;
-
-                getView().showCategories(categories);
-
+                getView().showCategories(categories.getCategories());
             }
 
             @Override
@@ -54,6 +53,6 @@ public class DineOutPresenterImpl extends DineOutPresenter {
     @Override
     public void onDetach() {
         super.onDetach();
-        disposable.dispose();
+        mDisposable.dispose();
     }
 }

@@ -11,6 +11,7 @@ import com.mikeescom.dineout.repo.dto.LocationDetails;
 import com.mikeescom.dineout.repo.dto.Restaurant;
 import com.mikeescom.dineout.repo.dto.Review;
 import com.mikeescom.dineout.repo.dto.Search;
+import com.mikeescom.dineout.repo.request.GetCategoriesRequest;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ import io.reactivex.Observable;
 import io.reactivex.annotations.NonNull;
 
 public interface DineOutLocalRepo {
-    Observable<List<Category>> getCategories();
+    Observable<GetCategoriesRequest> getCategories();
     Observable<List<City>> getCities();
     Observable<List<Collection>> getCollections();
     Observable<List<Cuisine>> getCuisines();

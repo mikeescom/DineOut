@@ -41,9 +41,9 @@ public class MainActivity extends BaseActivity<DineOutPresenter> implements Dine
         DineOutRemoteRepo remoteDineOutRepo = new DineOutRemoteRepoImpl();
         DineOutLocalDB localDB = Room.databaseBuilder(getApplicationContext(), DineOutLocalDB.class, DBConstant.DB_NAME).build();
         DineOutLocalRepo localDineOutRepo = new DineOutLocalRepoImpl(localDB.categoriesDao());
-        DineOutRepo usersRepo = new DineOutRepoImpl(remoteDineOutRepo, localDineOutRepo);
+        DineOutRepo dineOutRepo = new DineOutRepoImpl(remoteDineOutRepo, localDineOutRepo);
 
-        return new DineOutPresenterImpl(usersRepo, AndroidSchedulers.mainThread());
+        return new DineOutPresenterImpl(dineOutRepo, AndroidSchedulers.mainThread());
     }
 
     @Override

@@ -13,6 +13,7 @@ import com.mikeescom.dineout.repo.dto.LocationDetails;
 import com.mikeescom.dineout.repo.dto.Restaurant;
 import com.mikeescom.dineout.repo.dto.Review;
 import com.mikeescom.dineout.repo.dto.Search;
+import com.mikeescom.dineout.repo.request.GetCategoriesRequest;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ import io.reactivex.Observable;
 
 public class DineOutRemoteRepoImpl extends BaseRemote implements DineOutRemoteRepo {
     @Override
-    public Observable<List<Category>> getCategories() {
+    public Observable<GetCategoriesRequest> getCategories() {
         return create(DineOutServices.CategoriesServices.class, RemoteConfiguration.BASE_URL).getCategories();
     }
 

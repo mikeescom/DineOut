@@ -13,28 +13,28 @@ public class Category {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = DBConstant.CATEGORY_ID)
-    @SerializedName("category_id")
+    @SerializedName("id")
     @Expose
-    private String categoryId;
+    private int id;
     @ColumnInfo(name = DBConstant.CATEGORY_NAME)
-    @SerializedName("category_name")
+    @SerializedName("name")
     @Expose
-    private String categoryName;
+    private String name;
 
-    public String getCategoryId() {
-        return categoryId;
+    public int getId() {
+        return id;
     }
 
-    public void setCategoryId(String categoryId) {
-        this.categoryId = categoryId;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public String getCategoryName() {
-        return categoryName;
+    public String getName() {
+        return name;
     }
 
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
+    public void setName(String name) {
+        this.name = name;
     }
 
 }
