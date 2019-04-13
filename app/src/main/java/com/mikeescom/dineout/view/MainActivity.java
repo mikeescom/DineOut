@@ -17,6 +17,7 @@ import com.mikeescom.dineout.repo.DineOutRepo;
 import com.mikeescom.dineout.repo.DineOutRepoImpl;
 import com.mikeescom.dineout.repo.dto.Categories;
 import com.mikeescom.dineout.repo.dto.Category;
+import com.mikeescom.dineout.repo.dto.City;
 import com.mikeescom.dineout.repo.local.DBConstant;
 import com.mikeescom.dineout.repo.local.DineOutLocalDB;
 import com.mikeescom.dineout.repo.local.DineOutLocalRepo;
@@ -42,7 +43,7 @@ public class MainActivity extends BaseActivity<DineOutPresenter> implements Dine
 
         DineOutRemoteRepo remoteDineOutRepo = new DineOutRemoteRepoImpl();
         DineOutLocalDB localDB = Room.databaseBuilder(getApplicationContext(), DineOutLocalDB.class, DBConstant.DB_NAME).build();
-        DineOutLocalRepo localDineOutRepo = new DineOutLocalRepoImpl(localDB.categoriesDao());
+        DineOutLocalRepo localDineOutRepo = new DineOutLocalRepoImpl(localDB);
         DineOutRepo dineOutRepo = new DineOutRepoImpl(remoteDineOutRepo, localDineOutRepo);
 
         return new DineOutPresenterImpl(dineOutRepo, AndroidSchedulers.mainThread());
@@ -54,6 +55,7 @@ public class MainActivity extends BaseActivity<DineOutPresenter> implements Dine
         setContentView(R.layout.activity_main);
         recyclerViewUser = findViewById(R.id.recycler_view_user);
         getPresenter().getCategories();
+        getPresenter().getCities("San Jose", 37.4648224,0,null, 10);
     }
 
     @Override
@@ -78,6 +80,12 @@ public class MainActivity extends BaseActivity<DineOutPresenter> implements Dine
         // specify an adapter (see also next example)
         categoryRecyclerViewAdapter = new CategoryRecyclerViewAdapter(getApplicationContext(), categoryList);
         recyclerViewUser.setAdapter(categoryRecyclerViewAdapter);
+    }
+
+    @Override
+    public void showCities(List<City> cities) {
+        Log.d(TAG, "showCities() returned: " + cities.size());
+        List<City> cityList = new ArrayList<>();
     }
 
     @Override

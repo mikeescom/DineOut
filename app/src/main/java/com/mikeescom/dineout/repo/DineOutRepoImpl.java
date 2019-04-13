@@ -2,9 +2,8 @@ package com.mikeescom.dineout.repo;
 
 import com.mikeescom.dineout.repo.local.DineOutLocalRepo;
 import com.mikeescom.dineout.repo.remote.DineOutRemoteRepo;
-import com.mikeescom.dineout.repo.request.GetCategoriesRequest;
-
-import java.util.List;
+import com.mikeescom.dineout.repo.request.GetCategoriesResponse;
+import com.mikeescom.dineout.repo.request.GetCitiesResponse;
 
 import io.reactivex.Observable;
 import io.reactivex.functions.Consumer;
@@ -21,13 +20,24 @@ public class DineOutRepoImpl implements DineOutRepo {
     }
 
     @Override
-    public Observable<GetCategoriesRequest> getCategories() {
-        return Observable.mergeDelayError(remoteDineOutRepo.getCategories().doOnNext(new Consumer<GetCategoriesRequest>() {
+    public Observable<GetCategoriesResponse> getCategories() {
+        return Observable.mergeDelayError(remoteDineOutRepo.getCategories().doOnNext(new Consumer<GetCategoriesResponse>() {
                     @Override
-                    public void accept(GetCategoriesRequest categories) throws Exception {
+                    public void accept(GetCategoriesResponse categories) throws Exception {
                         localDineOutRepo.saveCategories(categories.getCategories());
                     }
                 }).subscribeOn(Schedulers.io()), localDineOutRepo.getCategories().subscribeOn(Schedulers.io())
+        );
+    }
+
+    @Override
+    public Observable<GetCitiesResponse> getCities(String q, double lat, double lon, String citiesIds, int count) {
+        return Observable.mergeDelayError(remoteDineOutRepo.getCities(q, lat, lon, citiesIds, count).doOnNext(new Consumer<GetCitiesResponse>() {
+                    @Override
+                    public void accept(GetCitiesResponse cities) throws Exception {
+                        localDineOutRepo.saveCities(cities.getLocation_suggestions());
+                    }
+                }).subscribeOn(Schedulers.io()), localDineOutRepo.getCities().subscribeOn(Schedulers.io())
         );
     }
 }

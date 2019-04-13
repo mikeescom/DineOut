@@ -5,10 +5,10 @@ import com.mikeescom.dineout.repo.dto.Category;
 
 import java.util.List;
 
-public class GetCategoriesRequest {
+public class GetCategoriesResponse {
     private List<Categories> categories;
 
-    public GetCategoriesRequest(List<Categories> categories) {
+    public GetCategoriesResponse(List<Categories> categories) {
         this.categories = categories;
     }
 

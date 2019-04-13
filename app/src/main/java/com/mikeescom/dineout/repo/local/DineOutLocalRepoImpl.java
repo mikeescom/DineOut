@@ -1,9 +1,6 @@
 package com.mikeescom.dineout.repo.local;
 
-import android.support.annotation.VisibleForTesting;
-
 import com.mikeescom.dineout.repo.dto.Categories;
-import com.mikeescom.dineout.repo.dto.Category;
 import com.mikeescom.dineout.repo.dto.City;
 import com.mikeescom.dineout.repo.dto.Collection;
 import com.mikeescom.dineout.repo.dto.Cuisine;
@@ -14,39 +11,40 @@ import com.mikeescom.dineout.repo.dto.LocationDetails;
 import com.mikeescom.dineout.repo.dto.Restaurant;
 import com.mikeescom.dineout.repo.dto.Review;
 import com.mikeescom.dineout.repo.dto.Search;
+import com.mikeescom.dineout.repo.local.dbobjects.CitiesDao;
 import com.mikeescom.dineout.repo.local.dbobjects.DBCategory;
-import com.mikeescom.dineout.repo.request.GetCategoriesRequest;
+import com.mikeescom.dineout.repo.local.dbobjects.DBCity;
+import com.mikeescom.dineout.repo.request.GetCategoriesResponse;
+import com.mikeescom.dineout.repo.request.GetCitiesResponse;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.Callable;
 
 import io.reactivex.Observable;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.annotations.Nullable;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class DineOutLocalRepoImpl implements DineOutLocalRepo {
 
     private CategoriesDao categoriesDao;
+    private CitiesDao citiesDao;
 
-    public DineOutLocalRepoImpl(CategoriesDao categoriesDao) {
-        this.categoriesDao = categoriesDao;
+    public DineOutLocalRepoImpl(DineOutLocalDB dineOutLocalDB) {
+        this.categoriesDao = dineOutLocalDB.categoriesDao();
+        this.citiesDao = dineOutLocalDB.citiesDao();
     }
 
     @Override
-    public Observable<GetCategoriesRequest> getCategories() {
-        return Observable.fromCallable(new Callable<GetCategoriesRequest>() {
+    public Observable<GetCategoriesResponse> getCategories() {
+        return Observable.fromCallable(new Callable<GetCategoriesResponse>() {
             @Override
-            public GetCategoriesRequest call() throws Exception {
+            public GetCategoriesResponse call() throws Exception {
                 List<Categories> categoriesList = new ArrayList<>();
                 for (DBCategory dbCategory : categoriesDao.getAll()) {
                     categoriesList.add(new Categories(dbCategory.getId(), dbCategory.getName()));
                 }
-                return new GetCategoriesRequest(categoriesList);
+                return new GetCategoriesResponse(categoriesList);
             }
         });
     }
@@ -61,8 +59,48 @@ public class DineOutLocalRepoImpl implements DineOutLocalRepo {
     }
 
     @Override
-    public Observable<List<City>> getCities() {
-        return null;
+    public Observable<GetCitiesResponse> getCities() {
+        return Observable.fromCallable(new Callable<GetCitiesResponse>() {
+            @Override
+            public GetCitiesResponse call() throws Exception {
+                List<City> cityList = new ArrayList<>();
+                for (DBCity dbCity : citiesDao.getAll()) {
+                    cityList.add(new City(dbCity.getId()
+                            , dbCity.getName()
+                            , dbCity.getCountryId()
+                            , dbCity.getCountryName()
+                            , dbCity.getCountryFlagUrl()
+                            , dbCity.getShouldExperimentWith()
+                            , dbCity.getDiscoveryEnabled()
+                            , dbCity.getHasNewAdFormat()
+                            , dbCity.getIsState()
+                            , dbCity.getStateId()
+                            , dbCity.getStateName()
+                            , dbCity.getStateCode()));
+                }
+                return new GetCitiesResponse(cityList);
+            }
+        });
+    }
+
+    @Override
+    public void saveCities(List<City> cities) {
+        List<DBCity> dbCitiesList = new ArrayList<>();
+        for (City cityObject : cities) {
+            dbCitiesList.add(new DBCity(cityObject.getId()
+                    , cityObject.getName()
+                    , cityObject.getCountry_id()
+                    , cityObject.getCountry_name()
+                    , cityObject.getCountry_flag_url()
+                    , cityObject.getShould_experiment_with()
+                    , cityObject.getDiscovery_enabled()
+                    , cityObject.getHas_new_ad_format()
+                    , cityObject.getIs_state()
+                    , cityObject.getState_id()
+                    , cityObject.getState_name()
+                    , cityObject.getState_code()));
+        }
+        citiesDao.insertAll(dbCitiesList);
     }
 
     @Override
@@ -108,11 +146,6 @@ public class DineOutLocalRepoImpl implements DineOutLocalRepo {
     @Override
     public Observable<Search> getSearch() {
         return null;
-    }
-
-    @Override
-    public void saveCity(City city) {
-
     }
 
     @Override

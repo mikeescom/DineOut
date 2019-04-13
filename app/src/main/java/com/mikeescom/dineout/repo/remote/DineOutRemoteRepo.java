@@ -1,6 +1,5 @@
 package com.mikeescom.dineout.repo.remote;
 
-import com.mikeescom.dineout.repo.dto.Category;
 import com.mikeescom.dineout.repo.dto.City;
 import com.mikeescom.dineout.repo.dto.Collection;
 import com.mikeescom.dineout.repo.dto.Cuisine;
@@ -11,15 +10,16 @@ import com.mikeescom.dineout.repo.dto.LocationDetails;
 import com.mikeescom.dineout.repo.dto.Restaurant;
 import com.mikeescom.dineout.repo.dto.Review;
 import com.mikeescom.dineout.repo.dto.Search;
-import com.mikeescom.dineout.repo.request.GetCategoriesRequest;
+import com.mikeescom.dineout.repo.request.GetCategoriesResponse;
+import com.mikeescom.dineout.repo.request.GetCitiesResponse;
 
 import java.util.List;
 
 import io.reactivex.Observable;
 
 public interface DineOutRemoteRepo {
-    Observable<GetCategoriesRequest> getCategories();
-    Observable<List<City>> getCities();
+    Observable<GetCategoriesResponse> getCategories();
+    Observable<GetCitiesResponse> getCities(String q, double lat, double lon, String citiesIds, int count);
     Observable<List<Collection>> getCollections();
     Observable<List<Cuisine>> getCuisines();
     Observable<List<Establishment>> getEstablishments();
