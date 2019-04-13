@@ -15,6 +15,7 @@ import com.mikeescom.dineout.presenter.DineOutPresenter;
 import com.mikeescom.dineout.presenter.DineOutPresenterImpl;
 import com.mikeescom.dineout.repo.DineOutRepo;
 import com.mikeescom.dineout.repo.DineOutRepoImpl;
+import com.mikeescom.dineout.repo.dto.Categories;
 import com.mikeescom.dineout.repo.dto.Category;
 import com.mikeescom.dineout.repo.local.DBConstant;
 import com.mikeescom.dineout.repo.local.DineOutLocalDB;
@@ -23,6 +24,7 @@ import com.mikeescom.dineout.repo.local.DineOutLocalRepoImpl;
 import com.mikeescom.dineout.repo.remote.DineOutRemoteRepo;
 import com.mikeescom.dineout.repo.remote.DineOutRemoteRepoImpl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -55,10 +57,14 @@ public class MainActivity extends BaseActivity<DineOutPresenter> implements Dine
     }
 
     @Override
-    public void showCategories(List<Category> categories) {
+    public void showCategories(List<Categories> categories) {
         Log.d(TAG, "showCategories() returned: " + categories.size());
-        // use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerView
+        List<Category> categoryList = new ArrayList<>();
+
+        for (Categories categoriesObject : categories) {
+            categoryList.add(categoriesObject.getCategory());
+        }
+
         recyclerViewUser.setHasFixedSize(true);
 
         // use a linear layout manager
@@ -70,7 +76,7 @@ public class MainActivity extends BaseActivity<DineOutPresenter> implements Dine
                 DividerItemDecoration.VERTICAL));
 
         // specify an adapter (see also next example)
-        categoryRecyclerViewAdapter = new CategoryRecyclerViewAdapter(getApplicationContext(), categories);
+        categoryRecyclerViewAdapter = new CategoryRecyclerViewAdapter(getApplicationContext(), categoryList);
         recyclerViewUser.setAdapter(categoryRecyclerViewAdapter);
     }
 

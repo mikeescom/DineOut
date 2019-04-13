@@ -1,5 +1,6 @@
 package com.mikeescom.dineout.repo.local;
 
+import com.mikeescom.dineout.repo.dto.Categories;
 import com.mikeescom.dineout.repo.dto.Category;
 import com.mikeescom.dineout.repo.dto.City;
 import com.mikeescom.dineout.repo.dto.Collection;
@@ -31,7 +32,7 @@ public interface DineOutLocalRepo {
     Observable<Review> getReviews();
     Observable<Search> getSearch();
 
-    void saveCategories(@NonNull List<Category> categories);
+    void saveCategories(@NonNull List<Categories> categories);
     void saveCity(@NonNull City city);
     void saveCollection(@NonNull Collection collection);
     void saveCuisine(@NonNull Cuisine cuisine);

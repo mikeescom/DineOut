@@ -1,18 +1,27 @@
-package com.mikeescom.dineout.repo.dto;
+package com.mikeescom.dineout.repo.local.dbobjects;
+
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.mikeescom.dineout.repo.local.DBConstant;
 
-public class Category {
+@Entity(tableName = DBConstant.CATEGORIES_TABLE_NAME)
+public class DBCategory {
 
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = DBConstant.CATEGORY_ID)
     @SerializedName("id")
     @Expose
     private int id;
+    @ColumnInfo(name = DBConstant.CATEGORY_NAME)
     @SerializedName("name")
     @Expose
     private String name;
 
-    public Category(int id, String name) {
+    public DBCategory(int id, String name) {
         this.id = id;
         this.name = name;
     }

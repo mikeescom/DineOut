@@ -2,6 +2,7 @@ package com.mikeescom.dineout.repo.local;
 
 import android.support.annotation.VisibleForTesting;
 
+import com.mikeescom.dineout.repo.dto.Categories;
 import com.mikeescom.dineout.repo.dto.Category;
 import com.mikeescom.dineout.repo.dto.City;
 import com.mikeescom.dineout.repo.dto.Collection;
@@ -13,8 +14,10 @@ import com.mikeescom.dineout.repo.dto.LocationDetails;
 import com.mikeescom.dineout.repo.dto.Restaurant;
 import com.mikeescom.dineout.repo.dto.Review;
 import com.mikeescom.dineout.repo.dto.Search;
+import com.mikeescom.dineout.repo.local.dbobjects.DBCategory;
 import com.mikeescom.dineout.repo.request.GetCategoriesRequest;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,14 +42,22 @@ public class DineOutLocalRepoImpl implements DineOutLocalRepo {
         return Observable.fromCallable(new Callable<GetCategoriesRequest>() {
             @Override
             public GetCategoriesRequest call() throws Exception {
-                return new GetCategoriesRequest(categoriesDao.getAll());
+                List<Categories> categoriesList = new ArrayList<>();
+                for (DBCategory dbCategory : categoriesDao.getAll()) {
+                    categoriesList.add(new Categories(dbCategory.getId(), dbCategory.getName()));
+                }
+                return new GetCategoriesRequest(categoriesList);
             }
         });
     }
 
     @Override
-    public void saveCategories(List<Category> categories) {
-        categoriesDao.insertAll(categories);
+    public void saveCategories(List<Categories> categories) {
+        List<DBCategory> dbCategoryList = new ArrayList<>();
+        for (Categories categoriesObject : categories) {
+            dbCategoryList.add(new DBCategory(categoriesObject.getCategory().getId(), categoriesObject.getCategory().getName()));
+        }
+        categoriesDao.insertAll(dbCategoryList);
     }
 
     @Override
