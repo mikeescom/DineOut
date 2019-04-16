@@ -10,7 +10,4 @@ import java.util.List;
 public interface DineOutView extends MvpView {
     void showCategories(List<Categories> categories);
     void showCities(List<City> cities);
-    void showLoading();
-    void hideLoading();
-    void showError(String error);
 }

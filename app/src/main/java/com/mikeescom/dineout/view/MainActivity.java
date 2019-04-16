@@ -42,7 +42,9 @@ public class MainActivity extends BaseActivity<DineOutPresenter> implements Dine
     protected DineOutPresenter createPresenter() {
 
         DineOutRemoteRepo remoteDineOutRepo = new DineOutRemoteRepoImpl();
-        DineOutLocalDB localDB = Room.databaseBuilder(getApplicationContext(), DineOutLocalDB.class, DBConstant.DB_NAME).build();
+        DineOutLocalDB localDB = Room.databaseBuilder(getApplicationContext(), DineOutLocalDB.class, DBConstant.DB_NAME)
+                .fallbackToDestructiveMigration()
+                .build();
         DineOutLocalRepo localDineOutRepo = new DineOutLocalRepoImpl(localDB);
         DineOutRepo dineOutRepo = new DineOutRepoImpl(remoteDineOutRepo, localDineOutRepo);
 
