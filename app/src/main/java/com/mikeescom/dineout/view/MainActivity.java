@@ -1,6 +1,14 @@
 package com.mikeescom.dineout.view;
 
+import android.Manifest;
 import android.arch.persistence.room.Room;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
@@ -34,6 +42,10 @@ public class MainActivity extends BaseActivity<DineOutPresenter> implements Dine
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
+    private static final int REQUEST_CODE_LOCATION_PERMISSION = 101;
+
+    private LocationManager mLocationManager;
+    private Location mLocation;
     private RecyclerView recyclerViewUser;
     private CategoryRecyclerViewAdapter categoryRecyclerViewAdapter;
     private RecyclerView.LayoutManager layoutManager;
@@ -56,8 +68,9 @@ public class MainActivity extends BaseActivity<DineOutPresenter> implements Dine
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         recyclerViewUser = findViewById(R.id.recycler_view_user);
-        getPresenter().getCategories();
-        getPresenter().getCities("San Jose", 37.4648224,0,null, 10);
+        if(isLocationPermissionAllowed()) {
+            getLocation();
+        }
     }
 
     @Override
@@ -84,6 +97,49 @@ public class MainActivity extends BaseActivity<DineOutPresenter> implements Dine
         recyclerViewUser.setAdapter(categoryRecyclerViewAdapter);
     }
 
+    void getLocation() {
+        if (mLocation == null) {
+            try {
+                mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                mLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            } catch (SecurityException e) {
+                e.printStackTrace();
+            }
+        }
+        initData();
+    }
+
+    private void initData() {
+        getPresenter().getCategories();
+        getPresenter().getCities("San Jose", mLocation.getLatitude(),mLocation.getLongitude(),null, 10);
+    }
+
+    private boolean isLocationPermissionAllowed() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            return true;
+        }
+
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_LOCATION_PERMISSION);
+
+        return false;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_CODE_LOCATION_PERMISSION:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                     getLocation();
+                } else if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_DENIED) {
+                    // permission denied
+                    Log.w(TAG, "Permission denied");
+                }
+                break;
+        }
+    }
+
     @Override
     public void showCities(List<City> cities) {
         Log.d(TAG, "showCities() returned: " + cities.size());
@@ -93,11 +149,13 @@ public class MainActivity extends BaseActivity<DineOutPresenter> implements Dine
     @Override
     public void showLoading() {
         Log.d(TAG, "showLoading() returned: ");
+        showProgressDialog();
     }
 
     @Override
     public void hideLoading() {
         Log.d(TAG, "hideLoading() returned: ");
+        dismissProgressDialog();
     }
 
     @Override
