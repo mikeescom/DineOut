@@ -26,6 +26,7 @@ import com.mikeescom.dineout.repo.DineOutRepoImpl;
 import com.mikeescom.dineout.repo.dto.Categories;
 import com.mikeescom.dineout.repo.dto.Category;
 import com.mikeescom.dineout.repo.dto.City;
+import com.mikeescom.dineout.repo.dto.Collections;
 import com.mikeescom.dineout.repo.local.DBConstant;
 import com.mikeescom.dineout.repo.local.DineOutLocalDB;
 import com.mikeescom.dineout.repo.local.DineOutLocalRepo;
@@ -144,6 +145,12 @@ public class MainActivity extends BaseActivity<DineOutPresenter> implements Dine
     public void showCities(List<City> cities) {
         Log.d(TAG, "showCities() returned: " + cities.size());
         List<City> cityList = new ArrayList<>();
+        hideLoading();
+    }
+
+    @Override
+    public void showCollections(List<Collections> collections) {
+
     }
 
     @Override

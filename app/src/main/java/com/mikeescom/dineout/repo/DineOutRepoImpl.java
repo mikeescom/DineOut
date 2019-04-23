@@ -4,6 +4,7 @@ import com.mikeescom.dineout.repo.local.DineOutLocalRepo;
 import com.mikeescom.dineout.repo.remote.DineOutRemoteRepo;
 import com.mikeescom.dineout.repo.request.GetCategoriesResponse;
 import com.mikeescom.dineout.repo.request.GetCitiesResponse;
+import com.mikeescom.dineout.repo.request.GetCollectionsResponse;
 
 import io.reactivex.Observable;
 import io.reactivex.functions.Consumer;
@@ -38,6 +39,17 @@ public class DineOutRepoImpl implements DineOutRepo {
                         localDineOutRepo.saveCities(cities.getLocation_suggestions());
                     }
                 }).subscribeOn(Schedulers.io()), localDineOutRepo.getCities().subscribeOn(Schedulers.io())
+        );
+    }
+
+    @Override
+    public Observable<GetCollectionsResponse> getCollections(int cityId, double lat, double lon, int count) {
+        return Observable.mergeDelayError(remoteDineOutRepo.getCollections(cityId, lat, lon, count).doOnNext(new Consumer<GetCollectionsResponse>() {
+                    @Override
+                    public void accept(GetCollectionsResponse collections) throws Exception {
+                        localDineOutRepo.saveCollection(collections.getCollections());
+                    }
+                }).subscribeOn(Schedulers.io()), localDineOutRepo.getCollections().subscribeOn(Schedulers.io())
         );
     }
 }
