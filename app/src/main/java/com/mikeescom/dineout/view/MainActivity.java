@@ -112,7 +112,7 @@ public class MainActivity extends BaseActivity<DineOutPresenter> implements Dine
 
     private void initData() {
         getPresenter().getCategories();
-        getPresenter().getCities("San Jose", mLocation.getLatitude(),mLocation.getLongitude(),null, 10);
+        getPresenter().getCities("", mLocation.getLatitude(),mLocation.getLongitude(),null, 10);
     }
 
     private boolean isLocationPermissionAllowed() {
