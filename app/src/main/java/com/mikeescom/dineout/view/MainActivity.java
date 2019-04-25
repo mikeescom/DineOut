@@ -6,12 +6,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,14 +19,15 @@ import android.widget.ArrayAdapter;
 
 import com.mikeescom.dineout.R;
 import com.mikeescom.dineout.adapter.CategoryRecyclerViewAdapter;
+import com.mikeescom.dineout.adapter.CollectionRecyclerViewAdapter;
 import com.mikeescom.dineout.base.view.BaseActivity;
 import com.mikeescom.dineout.presenter.DineOutPresenter;
 import com.mikeescom.dineout.presenter.DineOutPresenterImpl;
 import com.mikeescom.dineout.repo.DineOutRepo;
 import com.mikeescom.dineout.repo.DineOutRepoImpl;
 import com.mikeescom.dineout.repo.dto.Categories;
-import com.mikeescom.dineout.repo.dto.Category;
 import com.mikeescom.dineout.repo.dto.City;
+import com.mikeescom.dineout.repo.dto.Collection;
 import com.mikeescom.dineout.repo.dto.Collections;
 import com.mikeescom.dineout.repo.local.DBConstant;
 import com.mikeescom.dineout.repo.local.DineOutLocalDB;
@@ -52,7 +51,7 @@ public class MainActivity extends BaseActivity<DineOutPresenter> implements Dine
     private LocationManager mLocationManager;
     private Location mLocation;
     private RecyclerView recyclerViewUser;
-    private CategoryRecyclerViewAdapter categoryRecyclerViewAdapter;
+    private CollectionRecyclerViewAdapter collectionRecyclerViewAdapter;
     private RecyclerView.LayoutManager layoutManager;
 
     private HashMap<String, String> mCitiesIds = new HashMap<>();
@@ -82,11 +81,28 @@ public class MainActivity extends BaseActivity<DineOutPresenter> implements Dine
 
     @Override
     public void showCategories(List<Categories> categories) {
-        Log.d(TAG, "showCategories() returned: " + categories.size());
-        List<Category> categoryList = new ArrayList<>();
 
-        for (Categories categoriesObject : categories) {
-            categoryList.add(categoriesObject.getCategory());
+    }
+
+    @Override
+    public void showCities(List<City> cities) {
+        Log.d(TAG, "showCities() returned: " + cities.size());
+        List<String> cityNameList = new ArrayList<>();
+        for (City city : cities) {
+            mCitiesIds.put(city.getName(), String.valueOf(city.getId()));
+            cityNameList.add(city.getName());
+        }
+        showSelectCityDialog(cityNameList);
+        hideLoading();
+    }
+
+    @Override
+    public void showCollections(List<Collections> collections) {
+        Log.d(TAG, "showCollections() returned: " + collections.size());
+        List<Collection> collectionList = new ArrayList<>();
+
+        for (Collections collectionsObject : collections) {
+            collectionList.add(collectionsObject.getCollection());
         }
 
         recyclerViewUser.setHasFixedSize(true);
@@ -100,25 +116,9 @@ public class MainActivity extends BaseActivity<DineOutPresenter> implements Dine
                 DividerItemDecoration.VERTICAL));
 
         // specify an adapter (see also next example)
-        categoryRecyclerViewAdapter = new CategoryRecyclerViewAdapter(getApplicationContext(), categoryList);
-        recyclerViewUser.setAdapter(categoryRecyclerViewAdapter);
-    }
-
-    @Override
-    public void showCities(List<City> cities) {
-        Log.d(TAG, "showCities() returned: " + cities.size());
-        List<String> cityNameList = new ArrayList<>();
-        for (City city : cities) {
-            mCitiesIds.put(String.valueOf(city.getId()), city.getName());
-            cityNameList.add(city.getName());
-        }
-        showSelectCityDialog(cityNameList);
+        collectionRecyclerViewAdapter = new CollectionRecyclerViewAdapter(getApplicationContext(), collectionList);
+        recyclerViewUser.setAdapter(collectionRecyclerViewAdapter);
         hideLoading();
-    }
-
-    @Override
-    public void showCollections(List<Collections> collections) {
-
     }
 
     void getLocation() {
@@ -130,11 +130,7 @@ public class MainActivity extends BaseActivity<DineOutPresenter> implements Dine
                 e.printStackTrace();
             }
         }
-        getPresenter().getCities("", mLocation.getLatitude(),mLocation.getLongitude(),null, 10);
-    }
-
-    private void initData() {
-        getPresenter().getCategories();
+        getPresenter().getCities("", mLocation.getLatitude(), mLocation.getLongitude(),null, 10);
     }
 
     private boolean isLocationPermissionAllowed() {
@@ -181,12 +177,14 @@ public class MainActivity extends BaseActivity<DineOutPresenter> implements Dine
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String strName = arrayAdapter.getItem(which);
+                final int cityId = Integer.parseInt(mCitiesIds.get(strName));
                 AlertDialog.Builder builderInner = new AlertDialog.Builder(MainActivity.this);
                 builderInner.setMessage(strName);
                 builderInner.setTitle("Your Selected Item is");
                 builderInner.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog,int which) {
+                        getPresenter().getCollections(cityId, mLocation.getLatitude(), mLocation.getLongitude() ,20);
                         dialog.dismiss();
                     }
                 });
