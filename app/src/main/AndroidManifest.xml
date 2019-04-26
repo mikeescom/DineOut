@@ -14,7 +14,6 @@
         android:roundIcon="@drawable/dine_out_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.activities.HomeActivity"></activity>
         <activity
             android:name=".ui.activities.SplashScreenActivity"
             android:theme="@style/SplashTheme">

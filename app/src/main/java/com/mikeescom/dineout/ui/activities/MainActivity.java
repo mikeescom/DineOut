@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
+import androidx.viewpager.widget.ViewPager;
+
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
@@ -18,7 +20,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 
+import com.google.android.material.tabs.TabLayout;
 import com.mikeescom.dineout.R;
+import com.mikeescom.dineout.ui.adapters.CollectionPagerAdapter;
 import com.mikeescom.dineout.ui.adapters.CollectionRecyclerViewAdapter;
 import com.mikeescom.dineout.base.view.BaseActivity;
 import com.mikeescom.dineout.presenter.DineOutPresenter;
@@ -49,6 +53,9 @@ public class MainActivity extends BaseActivity<DineOutPresenter> implements Dine
 
     private static final int REQUEST_CODE_LOCATION_PERMISSION = 101;
 
+    CollectionPagerAdapter collectionPagerAdapter;
+    ViewPager viewPager;
+    TabLayout tabLayout;
     private LocationManager mLocationManager;
     private Location mLocation;
     private RecyclerView recyclerViewUser;
@@ -74,6 +81,12 @@ public class MainActivity extends BaseActivity<DineOutPresenter> implements Dine
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        collectionPagerAdapter = new CollectionPagerAdapter(getSupportFragmentManager());
+        viewPager = findViewById(R.id.home_pager);
+        tabLayout = findViewById(R.id.tab_layout);
+        viewPager.setAdapter(collectionPagerAdapter);
+        tabLayout.setupWithViewPager(viewPager);
+
         recyclerViewUser = findViewById(R.id.recycler_view_user);
         if(isLocationPermissionAllowed()) {
             getLocation();
