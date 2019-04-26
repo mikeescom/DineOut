@@ -1,4 +1,4 @@
-package com.mikeescom.dineout.view;
+package com.mikeescom.dineout.ui;
 
 import com.mikeescom.dineout.base.view.MvpView;
 import com.mikeescom.dineout.repo.dto.Categories;

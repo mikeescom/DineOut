@@ -1,4 +1,4 @@
-package com.mikeescom.dineout.view;
+package com.mikeescom.dineout.ui;
 
 import android.app.Application;
 

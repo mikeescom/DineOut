@@ -1,4 +1,4 @@
-package com.mikeescom.dineout.view;
+package com.mikeescom.dineout.ui.activities;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;

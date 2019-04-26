@@ -1,4 +1,4 @@
-package com.mikeescom.dineout.view;
+package com.mikeescom.dineout.ui.activities;
 
 import android.Manifest;
 import android.arch.persistence.room.Room;
@@ -18,8 +18,7 @@ import android.util.Log;
 import android.widget.ArrayAdapter;
 
 import com.mikeescom.dineout.R;
-import com.mikeescom.dineout.adapter.CategoryRecyclerViewAdapter;
-import com.mikeescom.dineout.adapter.CollectionRecyclerViewAdapter;
+import com.mikeescom.dineout.ui.adapters.CollectionRecyclerViewAdapter;
 import com.mikeescom.dineout.base.view.BaseActivity;
 import com.mikeescom.dineout.presenter.DineOutPresenter;
 import com.mikeescom.dineout.presenter.DineOutPresenterImpl;
@@ -35,6 +34,7 @@ import com.mikeescom.dineout.repo.local.DineOutLocalRepo;
 import com.mikeescom.dineout.repo.local.DineOutLocalRepoImpl;
 import com.mikeescom.dineout.repo.remote.DineOutRemoteRepo;
 import com.mikeescom.dineout.repo.remote.DineOutRemoteRepoImpl;
+import com.mikeescom.dineout.ui.DineOutView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
