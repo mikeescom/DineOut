@@ -4,9 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.mikeescom.dineout.ui.activities.MainActivity">
-
-
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_user"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
