@@ -5,7 +5,6 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
-import com.mikeescom.dineout.repo.local.DBConstant;
 import com.mikeescom.dineout.repo.local.dbobjects.DBCity;
 
 import java.util.List;

@@ -1,7 +1,6 @@
 package com.mikeescom.dineout.presenter;
 
 import com.mikeescom.dineout.repo.DineOutRepo;
-import com.mikeescom.dineout.repo.request.GetCategoriesResponse;
 import com.mikeescom.dineout.repo.request.GetCitiesResponse;
 import com.mikeescom.dineout.repo.request.GetCollectionsResponse;
 
@@ -17,36 +16,6 @@ public class DineOutPresenterImpl extends DineOutPresenter {
     public DineOutPresenterImpl(DineOutRepo dineOutRepo, Scheduler scheduler) {
         mDineOutRep = dineOutRepo;
         mScheduler = scheduler;
-    }
-
-    @Override
-    public void getCategories() {
-        if (!isViewAttached()) {
-            return;
-        }
-
-        getView().showLoading();
-
-        mDisposable = mDineOutRep.getCategories().observeOn(mScheduler).subscribeWith(new DisposableObserver<GetCategoriesResponse>() {
-            @Override
-            public void onNext(GetCategoriesResponse categories) {
-                if (!isViewAttached())
-                    return;
-                getView().showCategories(categories.getCategories());
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                if (!isViewAttached())
-                    return;
-                getView().showError(e.getLocalizedMessage());
-            }
-
-            @Override
-            public void onComplete() {
-
-            }
-        });
     }
 
     @Override

@@ -5,16 +5,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.mikeescom.dineout.ui.activities.MainActivity">
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/home_pager"
-        android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:layout_marginBottom="15dp">
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tab_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </androidx.viewpager.widget.ViewPager>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_user"
         android:layout_width="match_parent"

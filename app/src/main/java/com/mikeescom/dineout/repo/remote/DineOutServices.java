@@ -1,7 +1,6 @@
 package com.mikeescom.dineout.repo.remote;
 
 import com.mikeescom.dineout.base.remote.RemoteConfiguration;
-import com.mikeescom.dineout.repo.request.GetCategoriesResponse;
 import com.mikeescom.dineout.repo.request.GetCitiesResponse;
 import com.mikeescom.dineout.repo.request.GetCollectionsResponse;
 
@@ -11,14 +10,6 @@ import retrofit2.http.Headers;
 import retrofit2.http.Query;
 
 public class DineOutServices {
-    public interface CategoriesServices {
-
-        @Headers({"user-key: " + RemoteConfiguration.API_KEY})
-        @GET("categories")
-        Observable<GetCategoriesResponse> getCategories();
-
-    }
-
     public interface CitiesServices {
 
         @Headers({"user-key: " + RemoteConfiguration.API_KEY})

@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
-import androidx.viewpager.widget.ViewPager;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -20,16 +19,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 
-import com.google.android.material.tabs.TabLayout;
 import com.mikeescom.dineout.R;
-import com.mikeescom.dineout.ui.adapters.CollectionPagerAdapter;
 import com.mikeescom.dineout.ui.adapters.CollectionRecyclerViewAdapter;
 import com.mikeescom.dineout.base.view.BaseActivity;
 import com.mikeescom.dineout.presenter.DineOutPresenter;
 import com.mikeescom.dineout.presenter.DineOutPresenterImpl;
 import com.mikeescom.dineout.repo.DineOutRepo;
 import com.mikeescom.dineout.repo.DineOutRepoImpl;
-import com.mikeescom.dineout.repo.dto.Categories;
 import com.mikeescom.dineout.repo.dto.City;
 import com.mikeescom.dineout.repo.dto.Collection;
 import com.mikeescom.dineout.repo.dto.Collections;
@@ -53,9 +49,6 @@ public class MainActivity extends BaseActivity<DineOutPresenter> implements Dine
 
     private static final int REQUEST_CODE_LOCATION_PERMISSION = 101;
 
-    CollectionPagerAdapter collectionPagerAdapter;
-    ViewPager viewPager;
-    TabLayout tabLayout;
     private LocationManager mLocationManager;
     private Location mLocation;
     private RecyclerView recyclerViewUser;
@@ -81,21 +74,10 @@ public class MainActivity extends BaseActivity<DineOutPresenter> implements Dine
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        collectionPagerAdapter = new CollectionPagerAdapter(getSupportFragmentManager());
-        viewPager = findViewById(R.id.home_pager);
-        tabLayout = findViewById(R.id.tab_layout);
-        viewPager.setAdapter(collectionPagerAdapter);
-        tabLayout.setupWithViewPager(viewPager);
-
         recyclerViewUser = findViewById(R.id.recycler_view_user);
         if(isLocationPermissionAllowed()) {
             getLocation();
         }
-    }
-
-    @Override
-    public void showCategories(List<Categories> categories) {
-
     }
 
     @Override
@@ -120,16 +102,10 @@ public class MainActivity extends BaseActivity<DineOutPresenter> implements Dine
         }
 
         recyclerViewUser.setHasFixedSize(true);
-
-        // use a linear layout manager
         layoutManager = new LinearLayoutManager(this);
         recyclerViewUser.setLayoutManager(layoutManager);
-
-        //add divider for spacing
         recyclerViewUser.addItemDecoration(new DividerItemDecoration(getApplicationContext(),
                 DividerItemDecoration.VERTICAL));
-
-        // specify an adapter (see also next example)
         collectionRecyclerViewAdapter = new CollectionRecyclerViewAdapter(getApplicationContext(), collectionList);
         recyclerViewUser.setAdapter(collectionRecyclerViewAdapter);
         hideLoading();
