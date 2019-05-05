@@ -7,5 +7,6 @@
     <string name="placeholder_collection_desc">Description : %s</string>
     <string name="progress_dialog_message">Loading&#8230;</string>
     <string name="your_location">Your location</string>
+    <string name="invalid_collection_url">Invalid collection URL.</string>
 
 </resources>

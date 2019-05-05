@@ -12,6 +12,7 @@ import androidx.room.Room;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
@@ -37,6 +38,7 @@ import com.mikeescom.dineout.repo.local.DineOutLocalRepoImpl;
 import com.mikeescom.dineout.repo.remote.DineOutRemoteRepo;
 import com.mikeescom.dineout.repo.remote.DineOutRemoteRepoImpl;
 import com.mikeescom.dineout.ui.DineOutView;
+import com.mikeescom.dineout.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -115,7 +117,16 @@ public class MainActivity extends BaseActivity<DineOutPresenter> implements Dine
         recyclerViewUser.setLayoutManager(layoutManager);
         recyclerViewUser.addItemDecoration(new DividerItemDecoration(getApplicationContext(),
                 DividerItemDecoration.VERTICAL));
-        collectionRecyclerViewAdapter = new CollectionRecyclerViewAdapter(getApplicationContext(), collectionList);
+        collectionRecyclerViewAdapter = new CollectionRecyclerViewAdapter(getApplicationContext()
+                , collectionList
+                , new CollectionRecyclerViewAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                Intent intent = new Intent(MainActivity.this, WebViewActivity.class);
+                intent.putExtra(Constants.INTENT_EXTRA_COLLECTION_URL, collectionList.get(position).getUrl());
+                startActivity(intent);
+            }
+        });
         recyclerViewUser.setAdapter(collectionRecyclerViewAdapter);
         hideLoading();
     }

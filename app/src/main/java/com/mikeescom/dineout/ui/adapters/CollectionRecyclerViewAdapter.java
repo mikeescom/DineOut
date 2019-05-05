@@ -18,17 +18,21 @@ import java.util.List;
 public class CollectionRecyclerViewAdapter extends RecyclerView.Adapter<CollectionRecyclerViewAdapter.CollectionViewHolder> {
     private final Context context;
     private List<Collection> items;
+    private final OnItemClickListener listener;
 
-    public CollectionRecyclerViewAdapter(Context context, List<Collection> items) {
+    public CollectionRecyclerViewAdapter(Context context, List<Collection> items, OnItemClickListener listener) {
         this.items = items;
         this.context = context;
+        this.listener = listener;
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(int position);
     }
 
     @Override
-    public CollectionViewHolder onCreateViewHolder(ViewGroup parent,
-                                                   int viewType) {
-        View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_collection, parent, false);
+    public CollectionViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_collection, parent, false);
         return new CollectionViewHolder(v);
     }
 
@@ -36,6 +40,12 @@ public class CollectionRecyclerViewAdapter extends RecyclerView.Adapter<Collecti
     public void onBindViewHolder(CollectionViewHolder holder, int position) {
         Collection item = items.get(position);
         holder.set(context,item);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onItemClick(position);
+            }
+        });
     }
 
     @Override
