@@ -3,6 +3,7 @@ package com.mikeescom.dineout.presenter;
 import com.mikeescom.dineout.repo.DineOutRepo;
 import com.mikeescom.dineout.repo.request.GetCategoriesResponse;
 import com.mikeescom.dineout.repo.request.GetCitiesResponse;
+import com.mikeescom.dineout.repo.request.GetCollectionsResponse;
 
 import io.reactivex.Scheduler;
 import io.reactivex.disposables.Disposable;
@@ -62,6 +63,36 @@ public class DineOutPresenterImpl extends DineOutPresenter {
                 if (!isViewAttached())
                     return;
                 getView().showCities(cities.getLocation_suggestions());
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                if (!isViewAttached())
+                    return;
+                getView().showError(e.getLocalizedMessage());
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+    }
+
+    @Override
+    public void getCollections(int cityId, double lat, double lon, int count) {
+        if (!isViewAttached()) {
+            return;
+        }
+
+        getView().showLoading();
+
+        mDisposable = mDineOutRep.getCollections(cityId, lat, lon, count).observeOn(mScheduler).subscribeWith(new DisposableObserver<GetCollectionsResponse>() {
+            @Override
+            public void onNext(GetCollectionsResponse collections) {
+                if (!isViewAttached())
+                    return;
+                getView().showCollections(collections.getCollections());
             }
 
             @Override

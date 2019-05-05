@@ -20,4 +20,13 @@ public class DBConstant {
     public static final String STATE_ID = "state_id";
     public static final String STATE_NAME = "state_name";
     public static final String STATE_CODE = "state_code";
+
+    public static final String COLLECTIONS_TABLE_NAME = "collections";
+    public static final String COLLECTION_ID = "collection_id";
+    public static final String COLLECTION_RES_COUNT = "res_count";
+    public static final String COLLECTION_IMAGE_URL = "image_url";
+    public static final String COLLECTION_URL = "url";
+    public static final String COLLECTION_TITLE = "title";
+    public static final String COLLECTION_DESC = "description";
+    public static final String COLLECTION_SHARE_URL = "share_url";
 }

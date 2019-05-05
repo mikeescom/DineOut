@@ -3,4 +3,10 @@
     <string name="action_settings">Settings</string>
     <string name="placeholder_category_id">Id : %d</string>
     <string name="placeholder_category_name">Category Name : %s</string>
+    <string name="placeholder_collection_title">Title : %s</string>
+    <string name="placeholder_collection_desc">Description : %s</string>
+    <string name="progress_dialog_message">Loading&#8230;</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

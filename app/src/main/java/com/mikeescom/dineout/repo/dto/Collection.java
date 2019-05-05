@@ -7,7 +7,7 @@ public class Collection {
 
     @SerializedName("collection_id")
     @Expose
-    private String collectionId;
+    private int collectionId;
     @SerializedName("title")
     @Expose
     private String title;
@@ -22,16 +22,32 @@ public class Collection {
     private String imageUrl;
     @SerializedName("res_count")
     @Expose
-    private String resCount;
+    private int resCount;
     @SerializedName("share_url")
     @Expose
     private String shareUrl;
 
-    public String getCollectionId() {
+    public Collection(int collectionId
+            , String title
+            , String url
+            , String description
+            , String imageUrl
+            , int resCount
+            , String shareUrl) {
+        this.collectionId = collectionId;
+        this.title = title;
+        this.url = url;
+        this.description = description;
+        this.imageUrl = imageUrl;
+        this.resCount = resCount;
+        this.shareUrl = shareUrl;
+    }
+
+    public int getCollectionId() {
         return collectionId;
     }
 
-    public void setCollectionId(String collectionId) {
+    public void setCollectionId(int collectionId) {
         this.collectionId = collectionId;
     }
 
@@ -67,11 +83,11 @@ public class Collection {
         this.imageUrl = imageUrl;
     }
 
-    public String getResCount() {
+    public int getResCount() {
         return resCount;
     }
 
-    public void setResCount(String resCount) {
+    public void setResCount(int resCount) {
         this.resCount = resCount;
     }
 

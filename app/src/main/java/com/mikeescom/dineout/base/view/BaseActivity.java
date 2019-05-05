@@ -1,14 +1,19 @@
 package com.mikeescom.dineout.base.view;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.mikeescom.dineout.R;
 import com.mikeescom.dineout.base.presenter.MvpPresenter;
 
 public abstract class BaseActivity<T extends MvpPresenter> extends AppCompatActivity implements MvpView {
 
     private T presenter;
+
+    private ProgressDialog mDialog;
 
     protected
     @NonNull
@@ -38,5 +43,27 @@ public abstract class BaseActivity<T extends MvpPresenter> extends AppCompatActi
     public void onDestroy() {
         super.onDestroy();
         getPresenter().onDetach();
+    }
+
+    protected void showProgressDialog() {
+        if ((mDialog != null && mDialog.isShowing()) || isFinishing()) {
+            return;
+        }
+        mDialog = new ProgressDialog(this);
+        mDialog.setMessage(getString(R.string.progress_dialog_message));
+        mDialog.setCancelable(false);
+        mDialog.setCanceledOnTouchOutside(false);
+        mDialog.show();
+    }
+
+    protected void dismissProgressDialog() {
+        if (mDialog == null || !mDialog.isShowing() || isFinishing()) {
+            return;
+        }
+        try {
+            mDialog.dismiss();
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
     }
 }

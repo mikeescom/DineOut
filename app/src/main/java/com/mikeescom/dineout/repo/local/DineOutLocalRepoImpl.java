@@ -2,7 +2,7 @@ package com.mikeescom.dineout.repo.local;
 
 import com.mikeescom.dineout.repo.dto.Categories;
 import com.mikeescom.dineout.repo.dto.City;
-import com.mikeescom.dineout.repo.dto.Collection;
+import com.mikeescom.dineout.repo.dto.Collections;
 import com.mikeescom.dineout.repo.dto.Cuisine;
 import com.mikeescom.dineout.repo.dto.DailyMenu;
 import com.mikeescom.dineout.repo.dto.Establishment;
@@ -11,11 +11,11 @@ import com.mikeescom.dineout.repo.dto.LocationDetails;
 import com.mikeescom.dineout.repo.dto.Restaurant;
 import com.mikeescom.dineout.repo.dto.Review;
 import com.mikeescom.dineout.repo.dto.Search;
-import com.mikeescom.dineout.repo.local.dbobjects.CitiesDao;
 import com.mikeescom.dineout.repo.local.dbobjects.DBCategory;
 import com.mikeescom.dineout.repo.local.dbobjects.DBCity;
 import com.mikeescom.dineout.repo.request.GetCategoriesResponse;
 import com.mikeescom.dineout.repo.request.GetCitiesResponse;
+import com.mikeescom.dineout.repo.request.GetCollectionsResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,10 +29,12 @@ public class DineOutLocalRepoImpl implements DineOutLocalRepo {
 
     private CategoriesDao categoriesDao;
     private CitiesDao citiesDao;
+    private CollectionsDao collectionsDao;
 
     public DineOutLocalRepoImpl(DineOutLocalDB dineOutLocalDB) {
         this.categoriesDao = dineOutLocalDB.categoriesDao();
         this.citiesDao = dineOutLocalDB.citiesDao();
+        this.collectionsDao = dineOutLocalDB.collectionsDao();
     }
 
     @Override
@@ -104,8 +106,38 @@ public class DineOutLocalRepoImpl implements DineOutLocalRepo {
     }
 
     @Override
-    public Observable<List<Collection>> getCollections() {
-        return null;
+    public void saveCollection(List<Collections> collections) {
+        List<DBCollection> dbCollectionList = new ArrayList<>();
+        for (Collections collectionsObject : collections) {
+            dbCollectionList.add(new DBCollection(collectionsObject.getCollection().getCollectionId()
+                    , collectionsObject.getCollection().getResCount()
+                    , collectionsObject.getCollection().getImageUrl()
+                    , collectionsObject.getCollection().getUrl()
+                    , collectionsObject.getCollection().getTitle()
+                    , collectionsObject.getCollection().getDescription()
+                    , collectionsObject.getCollection().getShareUrl()));
+        }
+        collectionsDao.insertAll(dbCollectionList);
+    }
+
+    @Override
+    public Observable<GetCollectionsResponse> getCollections() {
+        return Observable.fromCallable(new Callable<GetCollectionsResponse>() {
+            @Override
+            public GetCollectionsResponse call() throws Exception {
+                List<Collections> collectionsList = new ArrayList<>();
+                for (DBCollection dbCollection : collectionsDao.getAll()) {
+                    collectionsList.add(new Collections(dbCollection.getCollectionId()
+                            , dbCollection.getTitle()
+                            , dbCollection.getUrl()
+                            , dbCollection.getDescription()
+                            , dbCollection.getImageUrl()
+                            , dbCollection.getResCount()
+                            , dbCollection.getShareUrl()));
+                }
+                return new GetCollectionsResponse(collectionsList);
+            }
+        });
     }
 
     @Override
@@ -146,11 +178,6 @@ public class DineOutLocalRepoImpl implements DineOutLocalRepo {
     @Override
     public Observable<Search> getSearch() {
         return null;
-    }
-
-    @Override
-    public void saveCollection(Collection collection) {
-
     }
 
     @Override

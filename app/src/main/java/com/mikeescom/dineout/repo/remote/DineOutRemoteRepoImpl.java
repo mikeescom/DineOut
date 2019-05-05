@@ -14,6 +14,7 @@ import com.mikeescom.dineout.repo.dto.Review;
 import com.mikeescom.dineout.repo.dto.Search;
 import com.mikeescom.dineout.repo.request.GetCategoriesResponse;
 import com.mikeescom.dineout.repo.request.GetCitiesResponse;
+import com.mikeescom.dineout.repo.request.GetCollectionsResponse;
 
 import java.util.List;
 
@@ -33,8 +34,9 @@ public class DineOutRemoteRepoImpl extends BaseRemote implements DineOutRemoteRe
     }
 
     @Override
-    public Observable<List<Collection>> getCollections() {
-        return null;
+    public Observable<GetCollectionsResponse> getCollections(int cityId, double lat, double lon, int count) {
+        return create(DineOutServices.CollectionsServices.class, RemoteConfiguration.BASE_URL)
+                .getCollections(cityId, lat, lon, count);
     }
 
     @Override
