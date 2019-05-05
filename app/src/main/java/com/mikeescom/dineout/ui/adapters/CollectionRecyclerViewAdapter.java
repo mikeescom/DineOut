@@ -4,12 +4,14 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mikeescom.dineout.R;
 import com.mikeescom.dineout.repo.dto.Collection;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -45,18 +47,20 @@ public class CollectionRecyclerViewAdapter extends RecyclerView.Adapter<Collecti
     }
 
     public static class CollectionViewHolder extends RecyclerView.ViewHolder {
+        ImageView imageViewCollectionBanner;
         TextView textViewCollectionTitle;
         TextView textViewCollectionDesc;
 
         public CollectionViewHolder(View itemView) {
             super(itemView);
-
+            imageViewCollectionBanner = itemView.findViewById(R.id.image_view_collection_banner);
             textViewCollectionTitle = itemView.findViewById(R.id.text_view_collection_title);
             textViewCollectionDesc  = itemView.findViewById(R.id.text_view_collection_desc);
         }
 
         public void set(Context context, Collection item) {
             //UI setting code
+            Picasso.get().load(item.getImageUrl()).into(imageViewCollectionBanner);
             textViewCollectionTitle.setText(context.getString(R.string.placeholder_collection_title, item.getTitle()));
             textViewCollectionDesc.setText(context.getString(R.string.placeholder_collection_desc, item.getDescription()));
         }

@@ -18,6 +18,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
 
 import com.mikeescom.dineout.R;
 import com.mikeescom.dineout.ui.adapters.CollectionRecyclerViewAdapter;
@@ -52,10 +53,12 @@ public class MainActivity extends BaseActivity<DineOutPresenter> implements Dine
     private LocationManager mLocationManager;
     private Location mLocation;
     private RecyclerView recyclerViewUser;
+    private TextView tvSelectedCity;
     private CollectionRecyclerViewAdapter collectionRecyclerViewAdapter;
     private RecyclerView.LayoutManager layoutManager;
 
     private HashMap<String, String> mCitiesIds = new HashMap<>();
+    private String mSelectedCity = "";
 
     @Override
     protected DineOutPresenter createPresenter() {
@@ -74,6 +77,7 @@ public class MainActivity extends BaseActivity<DineOutPresenter> implements Dine
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        tvSelectedCity = findViewById(R.id.selected_city);
         recyclerViewUser = findViewById(R.id.recycler_view_user);
         if(isLocationPermissionAllowed()) {
             getLocation();
@@ -92,9 +96,14 @@ public class MainActivity extends BaseActivity<DineOutPresenter> implements Dine
         hideLoading();
     }
 
+    private void updateSelectedCity() {
+        tvSelectedCity.setText(mSelectedCity);
+    }
+
     @Override
     public void showCollections(List<Collections> collections) {
         Log.d(TAG, "showCollections() returned: " + collections.size());
+        updateSelectedCity();
         List<Collection> collectionList = new ArrayList<>();
 
         for (Collections collectionsObject : collections) {
@@ -166,10 +175,10 @@ public class MainActivity extends BaseActivity<DineOutPresenter> implements Dine
         builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String strName = arrayAdapter.getItem(which);
-                final int cityId = Integer.parseInt(mCitiesIds.get(strName));
+                mSelectedCity = arrayAdapter.getItem(which);
+                final int cityId = Integer.parseInt(mCitiesIds.get(mSelectedCity));
                 AlertDialog.Builder builderInner = new AlertDialog.Builder(MainActivity.this);
-                builderInner.setMessage(strName);
+                builderInner.setMessage(mSelectedCity);
                 builderInner.setTitle("Your Selected Item is");
                 builderInner.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
